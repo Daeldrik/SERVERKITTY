@@ -140,7 +140,25 @@ def add_room_request(players_id, request_json):
 
 
 def add_room(players_id, pos_x, pos_y, seed):
-    return "Not implemented", 501
+
+    request_sql = f'''SELECT * FROM rooms WHERE rooms.players_id = {players_id} AND rooms.rooms_position_x = {pos_x} AND rooms.rooms_position_y = {pos_y}'''
+
+    checkroom = sql_select(request_sql)
+
+    if len(checkroom) > 0:
+        return "Il y a deja une salle à cet endroit", 404
+    else:
+        request_sql = f'''INSERT INTO rooms(players_id, rooms_position_x, rooms_position_y, rooms_seed) 
+        VALUES ('{players_id}', '{pos_x}', '{pos_y}', '{seed}')'''
+        room_build = sql_insert(request_sql)
+        return jsonify({"id": room_build})
+
+
+
+
+
+
+
 
 
 @app.route('/users/<int:players_id>/rooms/<int:rooms_id>', methods=['DELETE'])
