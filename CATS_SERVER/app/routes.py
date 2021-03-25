@@ -118,7 +118,20 @@ def rooms_handling(players_id):
 
 
 def get_rooms_request(players_id):
-    return "Not implemented", 501
+
+    request_sql = f'''SELECT * FROM rooms WHERE rooms.players_id ={players_id}'''
+    rooms_spawn = sql_select(request_sql)
+
+    for room in rooms_spawn:
+
+        room_id = room["rooms_id"]
+        request_sql = f'''SELECT * FROM cats 
+        WHERE cats.rooms_id = {room_id}'''
+        room["cats"] = sql_select(request_sql)
+
+    return jsonify(rooms_spawn)
+
+
 
 
 def add_room_request(players_id, request_json):
