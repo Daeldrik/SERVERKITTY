@@ -102,7 +102,11 @@ def sign_up():
         "{formulaire_inscription["email"]}", 
         "{formulaire_inscription["password"]}")'''
 
-        sql_insert(sql_request)
+
+
+        players_id = sql_insert(sql_request)
+
+        add_room(players_id, 0, 0, formulaire_inscription["seed"])
 
         return "OK", 200
 
